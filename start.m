@@ -121,7 +121,7 @@ function function_select_menu_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
-    endasd
+end
 str = read_file_by_lines('preprocessing/functions.txt');
 
 set(hObject, 'String', str);
