@@ -11,7 +11,11 @@ function [ str ] = read_file_by_lines( filename )
         if isequal(str,'')
             str = tline;
         else
-            str = [str char(10) tline];
+            if ispc
+                str = [str char(13) char(10) tline];
+            else
+                str = [str char(10) tline];
+            end
         end
         tline = fgetl(fileID);
     end
