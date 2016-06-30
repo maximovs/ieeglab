@@ -8,7 +8,7 @@ if isfield(handles.data,'preprocessing_functions')
     if isempty(handles.data.preprocessing_functions)
         set(handles.pre_processing_functions_list,'String',[]);
     else
-        set(handles.pre_processing_functions_list,'String',handles.data.preprocessing_functions(:,1));
+        set(handles.pre_processing_functions_list,'String', cellfun(@(x) x.str, handles.data.preprocessing_functions, 'UniformOutput', false));
     end
     set(handles.pre_processing_functions_list,'Value', 1);
 end
@@ -16,7 +16,7 @@ if isfield(handles.data,'processing_functions')
     if isempty(handles.data.processing_functions)
         set(handles.processing_functions_list,'String',[]);
     else
-        set(handles.processing_functions_list,'String',handles.data.processing_functions(:,1));
+        set(handles.processing_functions_list,'String',cellfun(@(x) x.str, handles.data.processing_functions, 'UniformOutput', false));
     end
     set(handles.processing_functions_list,'Value', 1);
 end

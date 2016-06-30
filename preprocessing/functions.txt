@@ -1,4 +1,5 @@
-sin
+test_params; Enter a number= hola!; param2= 50; param3
+sin; enter a number= 1; enter an other number
 cos
 ones
 avg_filter

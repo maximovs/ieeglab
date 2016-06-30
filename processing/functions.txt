@@ -1,3 +1,4 @@
+test_params; Enter a number= 500; param2= 50; param3
 sin
 cos
 ones

@@ -22,7 +22,7 @@ function varargout = start(varargin)
 
 % Edit the above text to modify the response to help start
 
-% Last Modified by GUIDE v2.5 09-Jun-2016 12:14:35
+% Last Modified by GUIDE v2.5 30-Jun-2016 16:32:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,15 +51,32 @@ function start_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to start (see VARARGIN)
+addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
 data = struct();
 
 data.data_status = 0;
 
+%LOAD preprocessing
 data.preprocessing_functions = cell(0);
+[str, input] = read_file_by_lines('preprocessing/functions.txt');
+data.preprocessing_input = input;
+set(handles.preprocessing_function_select_menu, 'String', str);
+[data.current_preprocessing_function.str, data.current_preprocessing_function.pos] = get_current_popup_string(handles.preprocessing_function_select_menu);
+
+%LOAD epoching
+[str, input] = read_file_by_lines('epoching/functions.txt');
+set(handles.epoching_select_menu, 'String', str);
+data.epoching_input = input;
+[data.epoching_function.str, data.epoching_function.pos] = get_current_popup_string(handles.epoching_select_menu);
+
+%LOAD processing
 data.processing_functions = cell(0);
-data.epoching_function = get_current_popup_string(handles.epoching_select_menu);
-data.current_function = get_current_popup_string(handles.function_select_menu);
-data.current_processing_function = get_current_popup_string(handles.processing_select_menu);
+[str, input] = read_file_by_lines('processing/functions.txt');
+data.processing_input = input;
+set(handles.processing_select_menu, 'String', str);
+[data.current_processing_function.str, data.current_processing_function.pos] = get_current_popup_string(handles.processing_select_menu);
+
+
 handles.data = data;
 load_handles(handles);
 % Choose default command line output for start
@@ -101,34 +118,17 @@ if file_name
     guidata(hObject,handles)
 end
 
-% --- Executes on selection change in function_select_menu.
-function function_select_menu_Callback(hObject, eventdata, handles)
-% hObject    handle to function_select_menu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns function_select_menu contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from function_select_menu
-% Determine the selected data set.
-
-handles.data.current_function = get_current_popup_string(hObject);
-% Save the handles structure.
+% --- Executes on selection change in preprocessing_function_select_menu.
+function preprocessing_function_select_menu_Callback(hObject, eventdata, handles)
+[handles.data.current_preprocessing_function.str, handles.data.current_preprocessing_function.pos] = get_current_popup_string(hObject);
 guidata(hObject,handles)
 
 % --- Executes during object creation, after setting all properties.
-function function_select_menu_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to function_select_menu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
+function preprocessing_function_select_menu_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-str = read_file_by_lines('preprocessing/functions.txt');
-
-set(hObject, 'String', str);
+guidata(hObject,handles)
 
 
 % --- Executes on button press in add_button.
@@ -136,14 +136,26 @@ function add_button_Callback(hObject, eventdata, handles)
 % hObject    handle to add_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.data.preprocessing_functions = [handles.data.preprocessing_functions; {handles.data.current_function, strsplit(get(handles.preprocessing_variables,'String'),',')}];
+preprocessing_function.str = handles.data.current_preprocessing_function.str;
+preprocessing_function.pos = handles.data.current_preprocessing_function.pos;
+preprocessing_function.params = {};
+input = handles.data.preprocessing_input{handles.data.current_preprocessing_function.pos};
+if ~isempty(input(:,1))
+    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    if ~isempty(answer)
+        preprocessing_function.params = answer;
+    else
+        return
+    end
+end
+handles.data.preprocessing_functions{end+1} = preprocessing_function;
 handles.data.data_status = 0;
 load_handles(handles);
 guidata(hObject,handles)
 
 % --- Executes on selection change in pre_processing_functions_list.
 function pre_processing_functions_list_Callback(hObject, eventdata, handles)
-handles.data.current_function_to_delete = get(hObject,'Value');
+handles.data.current_preprocessing_function_to_delete = get(hObject,'Value');
 % Save the handles structure.
 guidata(hObject,handles)
 
@@ -153,12 +165,26 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
+% --- Executes on button press in edit_preprocessing_btn.
+function edit_preprocessing_btn_Callback(hObject, eventdata, handles)
+if isfield(handles.data,'current_preprocessing_function_to_delete')
+    preprocessing_function = handles.data.preprocessing_functions{handles.data.current_preprocessing_function_to_delete};
+    input = handles.data.preprocessing_input{preprocessing_function.pos};
+    if ~isempty(input(:,1))
+        answer = inputdlg(input(:,1),'Ingrese parametros', 1, preprocessing_function.params);
+        if ~isempty(answer)
+            preprocessing_function.params = answer;
+            handles.data.preprocessing_functions{handles.data.current_preprocessing_function_to_delete} = preprocessing_function;
+            handles.data.data_status = 0;
+            guidata(hObject,handles)
+        end
+    end
+end
 % --- Executes on button press in delete_button.
 function delete_button_Callback(hObject, eventdata, handles)
-if isfield(handles.data,'current_function_to_delete')
+if isfield(handles.data,'current_preprocessing_function_to_delete')
     if ~isempty(handles.data.preprocessing_functions(:))
-        handles.data.preprocessing_functions(handles.data.current_function_to_delete,:) = [];
+        handles.data.preprocessing_functions(:, handles.data.current_preprocessing_function_to_delete) = [];
         handles.data.data_status = 0;
     end
     load_handles(handles);
@@ -168,32 +194,68 @@ end
 
 % --- Executes on selection change in epoching_select_menu.
 function epoching_select_menu_Callback(hObject, eventdata, handles)
-
-handles.data.epoching_function = get_current_popup_string(hObject);
+[handles.data.epoching_function.str, handles.data.epoching_function.pos] = get_current_popup_string(hObject);
 handles.data.data_status = min(1,handles.data.data_status);
+handles.data.epoching_function.params = {};
+input = handles.data.epoching_input{handles.data.epoching_function.pos};
+handles.data.epoching_function.input = input;
+if ~isempty(input(:,1))
+    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    if ~isempty(answer)
+        handles.data.epoching_function.params = answer;
+    else
+        return
+    end
+end
 % Save the handles structure.
 guidata(hObject,handles)
 
 % --- Executes during object creation, after setting all properties.
 function epoching_select_menu_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to epoching_select_menu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-set(hObject, 'String', read_file_by_lines('epoching/functions.txt'));
-handles.data.epoching_function = get_current_popup_string(hObject);
 % Save the handles structure.
 guidata(hObject,handles)
 
+% --- Executes on button press in edit_epoching_btn.
+function edit_epoching_btn_Callback(hObject, eventdata, handles)
+input = handles.data.epoching_input{handles.data.epoching_function.pos};
+params = input(:,2);
+if isfield(handles.data.epoching_function,'params')
+    params = handles.data.epoching_function.params;
+end
+if ~isempty(input(:,1))
+    answer = inputdlg(input(:,1),'Ingrese parametros', 1, params);
+    if ~isempty(answer)
+        handles.data.epoching_function.params = answer;
+        handles.data.data_status = min(1,handles.data.data_status);
+        guidata(hObject,handles)
+    end
+end
+% Save the handles structure.
+
+
+
+% --- Executes on button press in edit_processing_btn.
+function edit_processing_btn_Callback(hObject, eventdata, handles)
+if isfield(handles.data,'current_processing_function_to_delete')
+    processing_function = handles.data.processing_functions{handles.data.current_processing_function_to_delete};
+    input = handles.data.processing_input{processing_function.pos};
+    if ~isempty(input(:,1))
+        answer = inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
+        if ~isempty(answer)
+            processing_function.params = answer;
+            handles.data.processing_functions{handles.data.current_processing_function_to_delete} = processing_function;
+            handles.data.data_status = min(2,handles.data.data_status);
+            guidata(hObject,handles)
+        end
+    end
+end
 
 % --- Executes on selection change in processing_select_menu.
 function processing_select_menu_Callback(hObject, eventdata, handles)
-handles.data.current_processing_function = get_current_popup_string(hObject);
+[handles.data.current_processing_function.str, handles.data.current_processing_function.pos] = get_current_popup_string(hObject);
 % Save the handles structure.
 guidata(hObject,handles)
 
@@ -202,14 +264,27 @@ function processing_select_menu_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-set(hObject, 'String', read_file_by_lines('processing/functions.txt'));
+
 
 % --- Executes on button press in add_processing_function_button.
 function add_processing_function_button_Callback(hObject, eventdata, handles)
-handles.data.processing_functions = [handles.data.processing_functions; {handles.data.current_processing_function, strsplit(get(handles.processing_variables,'String'),',')}];
-load_handles(handles);
+processing_function.str = handles.data.current_processing_function.str;
+processing_function.pos = handles.data.current_processing_function.pos;
+processing_function.params = {};
+input = handles.data.processing_input{handles.data.current_processing_function.pos};
+if ~isempty(input(:,1))
+    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    if ~isempty(answer)
+        processing_function.params = answer;
+    else
+        return
+    end
+end
+handles.data.processing_functions{end+1} = processing_function;
 handles.data.data_status = min(2,handles.data.data_status);
+load_handles(handles);
 guidata(hObject,handles)
+
 
 % --- Executes on selection change in processing_functions_list.
 function processing_functions_list_Callback(hObject, eventdata, handles)
@@ -227,48 +302,15 @@ end
 
 % --- Executes on button press in remove_processing_function_button.
 function remove_processing_function_button_Callback(hObject, eventdata, handles)
-if isfield(handles.data, 'current_processing_function_to_delete')
-    handles.data.processing_functions(handles.data.current_processing_function_to_delete, :) = [];
+if isfield(handles.data,'current_processing_function_to_delete')
+    if ~isempty(handles.data.processing_functions(:))
+        handles.data.processing_functions(:, handles.data.current_processing_function_to_delete) = [];
+        handles.data.data_status = min(2,handles.data.data_status);
+    end
     load_handles(handles);
-    handles.data.data_status = min(2,handles.data.data_status);
     guidata(hObject,handles)
 end
 
-
-function preprocessing_variables_Callback(hObject, eventdata, handles)
-
-
-% --- Executes during object creation, after setting all properties.
-function preprocessing_variables_CreateFcn(hObject, eventdata, handles)
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function epoching_variables_Callback(hObject, eventdata, handles)
-
-
-
-% --- Executes during object creation, after setting all properties.
-function epoching_variables_CreateFcn(hObject, eventdata, handles)
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function processing_variables_Callback(hObject, eventdata, handles)
-
-
-% --- Executes during object creation, after setting all properties.
-function processing_variables_CreateFcn(hObject, eventdata, handles)
-
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
 
 
 % --------------------------------------------------------------------
@@ -321,6 +363,7 @@ function run_preprocessing_Callback(hObject, eventdata, handles)
 function [handles] = run_preprocessing(hObject, handles)
     t = 0:1/5:20;
     handles.data.data = sin(2*pi*t*300);
+%     handles.data.data = handles.data.EEG.data;
     result = execute_preprocessing(handles);
     handles.data.preprocessed_data = result;
     handles.data.data_status = 1;
@@ -351,3 +394,16 @@ if file_name
     load_handles(handles);
     guidata(hObject,handles)
 end
+
+
+% --------------------------------------------------------------------
+function plot_scroll_Callback(hObject, eventdata, handles)
+[file_name, file_path] = uigetfile;
+% [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+EEG = pop_loadset('filename',file_name,'filepath', file_path);
+% [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
+EEG = eeg_checkset( EEG );
+pop_eegplot( EEG, 1, 1, 1);
+handles.data.EEG = EEG;
+guidata(hObject,handles)
+
