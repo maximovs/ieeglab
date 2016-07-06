@@ -1,17 +1,19 @@
-function [ output ] = execute_preprocessing( handles)
+function [ output, data ] = execute_preprocessing( handles)
 %GET_FIRST_COINCIDENCE Summary of this function goes here
 %   Detailed explanation goes here
     addpath('preprocessing/');
-    output = handles.data.data;
+    output = handles.data.EEG;
+    data = handles.data;
     for i = 1:length(handles.data.preprocessing_functions)
         preprocessing_function = handles.data.preprocessing_functions{i};
         f = str2func(preprocessing_function.str);
         arguments = preprocessing_function.params;
         if ~isempty([arguments{:}])
             arguments{end+1} = output;
-            output = f(arguments{:});
+            arguments{end+1} = data;
+            [output, data] = f(arguments{:});
         else
-            output = f(output);
+            [output, data] = f(output, data);
         end
     end
 end

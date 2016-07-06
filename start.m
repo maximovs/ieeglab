@@ -22,7 +22,7 @@ function varargout = start(varargin)
 
 % Edit the above text to modify the response to help start
 
-% Last Modified by GUIDE v2.5 30-Jun-2016 16:32:09
+% Last Modified by GUIDE v2.5 06-Jul-2016 10:45:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,6 +51,7 @@ function start_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to start (see VARARGIN)
+addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/eeglab13_5_4b'));
 addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
 data = struct();
 
@@ -364,7 +365,8 @@ function [handles] = run_preprocessing(hObject, handles)
     t = 0:1/5:20;
     handles.data.data = sin(2*pi*t*300);
 %     handles.data.data = handles.data.EEG.data;
-    result = execute_preprocessing(handles);
+    [result, data] = execute_preprocessing(handles);
+    handles.data = data;
     handles.data.preprocessed_data = result;
     handles.data.data_status = 1;
     guidata(hObject,handles)
@@ -398,12 +400,35 @@ end
 
 % --------------------------------------------------------------------
 function plot_scroll_Callback(hObject, eventdata, handles)
-[file_name, file_path] = uigetfile;
-% [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
-EEG = pop_loadset('filename',file_name,'filepath', file_path);
-% [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
-EEG = eeg_checkset( EEG );
-pop_eegplot( EEG, 1, 1, 1);
-handles.data.EEG = EEG;
-guidata(hObject,handles)
+if isfield(handles.data,'EEG')
+    pop_eegplot( handles.data.EEG, 1, 1, 1);
+end
 
+
+% --------------------------------------------------------------------
+function load_set_Callback(hObject, eventdata, handles)
+[file_name, file_path] = uigetfile('*.set','Select the .set file');
+if file_name
+    EEG = pop_loadset('filename',file_name,'filepath', file_path);
+    EEG = eeg_checkset( EEG );
+    handles.data.EEG = EEG;
+    guidata(hObject,handles)
+end
+    
+
+
+% --------------------------------------------------------------------
+function channels_to_discard_Callback(hObject, eventdata, handles)
+[channels_to_discard, median_variance, jumps, nr_jumps]  = get_channels_to_discard(handles.data.EEG.data, 200);
+data.channels_to_discard = channels_to_discard;
+data.median_variance = median_variance;
+data.jumps = jumps;
+data.nr_jumps = nr_jumps;
+assignin('base', 'channels_to_discard', data)
+
+
+% --------------------------------------------------------------------
+function plot_scroll_preprocessed_Callback(hObject, eventdata, handles)
+if isfield(handles.data,'preprocessed_data')
+    pop_eegplot( handles.data.preprocessed_data, 1, 1, 1);
+end
