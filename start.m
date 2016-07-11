@@ -22,7 +22,7 @@ function varargout = start(varargin)
 
 % Edit the above text to modify the response to help start
 
-% Last Modified by GUIDE v2.5 06-Jul-2016 10:45:47
+% Last Modified by GUIDE v2.5 11-Jul-2016 14:38:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -416,15 +416,36 @@ if file_name
 end
     
 
+function [data] = calculate_channels_to_discard(handles)
+    if isfield(handles.data,'preprocessed_data')
+        eeg_data = handles.data.preprocessed_data.data;
+    else
+        eeg_data = handles.data.EEG.data;
+    end
+    [channels_to_discard, median_variance, jumps, nr_jumps]  = get_channels_to_discard(eeg_data, 200);
+    data.channels_to_discard = channels_to_discard;
+    data.median_variance = median_variance;
+    data.jumps = jumps;
+    data.nr_jumps = nr_jumps;
+    disp(channels_to_discard);
+    assignin('base', 'channels_to_discard', data)
+    
 
 % --------------------------------------------------------------------
-function channels_to_discard_Callback(hObject, eventdata, handles)
-[channels_to_discard, median_variance, jumps, nr_jumps]  = get_channels_to_discard(handles.data.EEG.data, 200);
-data.channels_to_discard = channels_to_discard;
-data.median_variance = median_variance;
-data.jumps = jumps;
-data.nr_jumps = nr_jumps;
-assignin('base', 'channels_to_discard', data)
+function calculate_channels_to_discard_Callback(hObject, eventdata, handles)
+calculate_channels_to_discard(handles);
+
+% --------------------------------------------------------------------
+function set_channels_to_discard_Callback(hObject, eventdata, handles)
+if ~ isfield(handles.data,'channels_to_discard')
+    data = calculate_channels_to_discard(handles);
+    handles.data.channels_to_discard = data.channels_to_discard;
+end
+answer = inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
+if ~isempty(answer)
+    handles.data.channels_to_discard = str2num(answer{1});
+end
+guidata(hObject,handles)
 
 
 % --------------------------------------------------------------------

@@ -5,9 +5,7 @@ signal = signal';
 signalvariance=var(signal);
 aboveSV=find(signalvariance>(5*median(signalvariance)));
 belowSV=find(signalvariance<(median(signalvariance)/5));
-if ~isempty([aboveSV belowSV])
-    disp(['Channels to discard: ' int2str([aboveSV belowSV])]); 
-end 
+
 median_variance = union(aboveSV,belowSV);
 
 nr_jumps=zeros(1,size(signal,2));
@@ -19,4 +17,4 @@ figure,plot(nr_jumps);
 title('Jumps')
 jumps = find(nr_jumps>0);
 
-channels_to_discard = union(median_variance,jumps);
+channels_to_discard = sort(union(median_variance,jumps));
