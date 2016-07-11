@@ -22,7 +22,7 @@ function varargout = start(varargin)
 
 % Edit the above text to modify the response to help start
 
-% Last Modified by GUIDE v2.5 11-Jul-2016 14:38:50
+% Last Modified by GUIDE v2.5 11-Jul-2016 15:08:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -452,4 +452,15 @@ guidata(hObject,handles)
 function plot_scroll_preprocessed_Callback(hObject, eventdata, handles)
 if isfield(handles.data,'preprocessed_data')
     pop_eegplot( handles.data.preprocessed_data, 1, 1, 1);
+end
+
+
+% --------------------------------------------------------------------
+function channels_spectra_and_map_Callback(hObject, eventdata, handles)
+if isfield(handles.data,'preprocessed_data')
+    EEG = handles.data.preprocessed_data;
+    answer = inputdlg({'percent data to sample', 'plotting frequency range'},'Ingrese parametros', 1, {'15', '[2 25]'});
+    if ~isempty(answer)
+        figure; pop_spectopo(EEG, 1, [EEG.xmin*1000 EEG.xmax*1000], 'EEG' , 'percent', str2num(answer{1}), 'freqrange',str2num(answer{2}),'electrodes','off');
+    end
 end

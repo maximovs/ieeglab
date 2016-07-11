@@ -1,2 +1,4 @@
 print_channels_labels; File name
-w_preprocess; file_name= Ignacio2; notchHz= [50 100]; notchWidth= 1; bandpassRange= [1 200]; bad_chans1= [1 2 7 48 67 73 75 78 79 91 92 93 94 95 96 97 98 99 100 101 105 106 120 121 122 125 127]; bad_chans2= []
+w_preprocess; file_name= Ignacio2; notchHz= [50 100]; notchWidth= 1; bandpassRange= [1 200]
+w_notch_filter; notchHz= [50]; notchWidth= 1
+w_bandpass_filter; bandpassRange= [1 200]

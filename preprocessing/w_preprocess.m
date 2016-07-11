@@ -1,11 +1,9 @@
-function [ EEG, data ] = w_preprocess( file_name, notchHz, notchWidth, bandpassRange,bad_chans1, bad_chans2, EEG, data )
+function [ EEG, data ] = w_preprocess( file_name, notchHz, notchWidth, bandpassRange, EEG, data )
 %PREPROC Summary of this function goes here
 %   Detailed explanation goes here
 notchHz = str2num(notchHz);
 notchWidth = str2num(notchWidth);
 bandpassRange = str2num(bandpassRange);
-bad_chans1 = str2num(bad_chans1);
-bad_chans2 = str2num(bad_chans2);
 % notchHz = [50 100];
 % notchWidth = 1;
 % bandpassRange = [1 200];
@@ -22,9 +20,13 @@ labelFileName = [file_name 'labels'];
 filteredFileName = [file_name 'filtered'];
 referencedFileName = [file_name 'referenced'];
 %
-channels2Delete = union(bad_chans1,bad_chans2);
 
-[EEG, data] = preprocess(labelFileName,channels2Delete,notchHz,notchWidth,bandpassRange,filteredFileName,referencedFileName, EEG, data);
+if isfield(data, 'channels_to_discard')
+    channels_to_discard = data.channels_to_discard;
+else
+    channels_to_discard = [];
+end
+[EEG, data] = preprocess(labelFileName,channels_to_discard,notchHz,notchWidth,bandpassRange,filteredFileName,referencedFileName, EEG, data);
 
 %To run next step it is necessary to have electrode localization
 %PreprocessChannelLocation('Hernandez1_LocalizacionElectrodos.txt',channels2Delete,'Hernandez1_Preprocessed');
