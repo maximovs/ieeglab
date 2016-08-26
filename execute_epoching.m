@@ -1,9 +1,9 @@
-function [ output ] = execute_epoching( handles)
+function [ output, data ] = execute_epoching( handles)
 %GET_FIRST_COINCIDENCE Summary of this function goes here
 %   Detailed explanation goes here
     addpath('epoching/');
     output = handles.data.preprocessed_data;
-
+    data = handles.data;
     f = str2func(handles.data.epoching_function.str);
     if ~isfield(handles.data.epoching_function,'params')
         input = handles.data.epoching_input{handles.data.epoching_function.pos};
@@ -23,9 +23,10 @@ function [ output ] = execute_epoching( handles)
     arguments = handles.data.epoching_function.params;
     if ~isempty([arguments{:}])
         arguments{end+1} = output;
-        output = f(arguments{:});
+        arguments{end+1} = data;
+        [output, data] = f(arguments{:});
     else
-        output = f(output);
+        [output, data] = f(output, data);
     end
 
 end

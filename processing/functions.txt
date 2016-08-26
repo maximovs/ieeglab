@@ -1,4 +1,4 @@
+w_filter_epochs; Enter epochs
 test_params; Enter a number= 500; param2= 50; param3
-sin
-cos
-ones
+w_process_erps; cycles= 0; frequencyRange= [0 150]; alpha= 0; scale= abs; basenorm= 1; tlimits= [-250 1000]; tlimitsForBaseline= [-250 0]; fdrCorrect= 0; weightedSignificance= 0; surroundingsWeight= 0.5; erpsmax= [-8 8]; marktimes= []; roi_struct_filename= DVT_P10_Anatomic.mat
+w_smi; filename= Ignacio; data_range= [0 0.1]; kernel= 3; fs= 1024; taus= [1 2 4 8 16 32]

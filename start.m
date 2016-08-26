@@ -22,7 +22,7 @@ function varargout = start(varargin)
 
 % Edit the above text to modify the response to help start
 
-% Last Modified by GUIDE v2.5 11-Jul-2016 15:08:37
+% Last Modified by GUIDE v2.5 20-Jul-2016 11:17:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,11 @@ function start_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to start (see VARARGIN)
+addpath('/Users/maximo/Documents/MATLAB/tesis/fieldtrip-20160726');
+ft_defaults
 addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/eeglab13_5_4b'));
 addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
+
 data = struct();
 
 data.data_status = 0;
@@ -286,6 +289,30 @@ handles.data.data_status = min(2,handles.data.data_status);
 load_handles(handles);
 guidata(hObject,handles)
 
+% --------------------------------------------------------------------
+function add_epochs_filter_Callback(hObject, eventdata, handles)
+% hObject    handle to add_epochs_filter (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if ~isfield(handles.data, 'epoched_data')
+    return
+end
+processing_function.str = 'w_filter_epochs';
+processing_function.pos = get_first_coincidence(get(handles.processing_select_menu, 'String'),'w_filter_epochs');
+processing_function.params = {strjoin(unique({handles.data.epoched_data.epoch.eventtype}))};
+input = handles.data.processing_input{handles.data.current_processing_function.pos};
+if ~isempty(input(:,1))
+    answer = inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
+    if ~isempty(answer)
+        processing_function.params = answer;
+    else
+        return
+    end
+end
+handles.data.processing_functions{end+1} = processing_function;
+handles.data.data_status = min(2,handles.data.data_status);
+load_handles(handles);
+guidata(hObject,handles)
 
 % --- Executes on selection change in processing_functions_list.
 function processing_functions_list_Callback(hObject, eventdata, handles)
@@ -336,12 +363,13 @@ function plot_processing_Callback(hObject, eventdata, handles)
     plot(handles.data.processed_data);
 
 % --------------------------------------------------------------------
-function plot_epoching_Callback(hObject, eventdata, handles)
+function plot_scroll_epoching_Callback(hObject, eventdata, handles)
     if handles.data.data_status < 2
         handles = run_epoching(hObject, handles);
     end
-    figure
-    plot(handles.data.epoched_data);
+    if isfield(handles.data,'epoched_data')
+        pop_eegplot( handles.data.epoched_data, 1, 1, 1);
+    end
 
 
 % --- Executes on key press with focus on epoching_variables and none of its controls.
@@ -375,7 +403,9 @@ function [handles] = run_epoching(hObject, handles)
     if handles.data.data_status < 1
         handles = run_preprocessing(hObject, handles);
     end
-    handles.data.epoched_data = execute_epoching(handles);
+    [result, data] = execute_epoching(handles);
+    handles.data = data;
+    handles.data.epoched_data = result;
     handles.data.data_status = 2;
     guidata(hObject,handles)
 
@@ -383,7 +413,9 @@ function [handles] = run_processing(hObject, handles)
     if handles.data.data_status < 2
         handles = run_epoching(hObject, handles);
     end
-    handles.data.processed_data = execute_processing(handles);
+    [result, data] = execute_processing(handles);
+    handles.data = data;
+    handles.data.processed_data = result;
     handles.data.data_status = 3;
     guidata(hObject,handles)
 
@@ -422,6 +454,7 @@ function [data] = calculate_channels_to_discard(handles)
     else
         eeg_data = handles.data.EEG.data;
     end
+    addpath('preprocessing/');
     [channels_to_discard, median_variance, jumps, nr_jumps]  = get_channels_to_discard(eeg_data, 200);
     data.channels_to_discard = channels_to_discard;
     data.median_variance = median_variance;
@@ -464,3 +497,5 @@ if isfield(handles.data,'preprocessed_data')
         figure; pop_spectopo(EEG, 1, [EEG.xmin*1000 EEG.xmax*1000], 'EEG' , 'percent', str2num(answer{1}), 'freqrange',str2num(answer{2}),'electrodes','off');
     end
 end
+
+
