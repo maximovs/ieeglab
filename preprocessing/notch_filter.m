@@ -8,6 +8,7 @@ function [notch_filtered_signal] = notch_filter(EEG,hz2Eliminate,hzWidth)
 
 %ALTERNATIVE
 % EEG = pop_iirfilt( EEG, hz2Eliminate - hzWidth, hz2Eliminate + hzWidth, [], [1]);
+figure
 EEG = pop_eegfiltnew(EEG, hz2Eliminate - hzWidth, hz2Eliminate + hzWidth, 3380, 1, [], 1);
 notch_filtered_signal = EEG.data;
 

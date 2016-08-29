@@ -30,8 +30,7 @@ for i = 1 : size(notchHz,2)
 end
 
 %Band-pass filtering
-%EEG = pop_iirfilt( EEG, bandpassRange(1,1), bandpassRange(1,2), [], [1]);
-%EEG = pop_eegfilt( EEG, bandpassRange(1,1), bandpassRange(1,2), [], [0], 0, 0, 'fir1', 0);
+figure
 EEG = pop_eegfiltnew(EEG, bandpassRange(1,1), bandpassRange(1,2), 3380, 0, [], 1);
 
 plot_power_spectrum(EEG.data(1,:),EEG.srate,'Band-pass filtered Signal')
