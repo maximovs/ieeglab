@@ -14,11 +14,11 @@ if ~isempty(answer)
 end
 epoch_window = str2num(epoch_window);
 base_window = str2num(base_window);
-EEG = pop_epoch( EEG,     types   , epoch_window, 'newname', '', 'epochinfo', 'yes');
+EEG = pop_epoch(EEG, types, epoch_window, 'newname', '', 'epochinfo', 'yes');
 
 if epoch_window(1) ~= 0
     display('Baseline Removal')
-    EEG = pop_rmbase( EEG, base_window);
+    EEG = pop_rmbase(EEG, base_window);
 end
 
 if ~isequal(file2save,'')
