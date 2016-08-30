@@ -1,4 +1,4 @@
-function [EEG, data] = w_process_erps(cycles, frequencyRange, alpha, scale, basenorm, tlimits, tlimitsForBaseline, fdrCorrect, weightedSignificance, surroundingsWeight, erpsmax, marktimes, roi_struct_filename, EEG, data)
+function [EEG, data] = w_process_erps(cycles, frequencyRange, alpha, scale, basenorm, tlimits, tlimitsForBaseline, fdrCorrect, weightedSignificance, surroundingsWeight, erpsmax, marktimes, roi_struct_filename, title_name_prefix, EEG, data)
 epoched_EEG = EEG;
 if isfield(data,'selected_epoched_EEG')
     epoched_EEG = data.selected_epoched_EEG;
@@ -40,10 +40,10 @@ roiStruct = DVT_P10_Anatomic(1);
 
 
 
-titleName = [path2save 'Repossini - Complete-'];
+titleName = [path2save title_name_prefix];
 [erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = PlotERPSByROI2(roiStruct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
 
-eval(['save ' path2save 'RepossiniERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);   
-eval(['save ' path2save 'RepossiniERPSOutputs_Complete.mat freqs timesout mbase g']);   
+eval(['save ' path2save title_name_prefix 'ERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);
+eval(['save ' path2save title_name_prefix 'ERPSOutputs_Complete.mat freqs timesout mbase g']);
 
 display('DONE')
