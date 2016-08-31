@@ -1,7 +1,7 @@
 function [ output, data ] = execute_processing( handles)
 %GET_FIRST_COINCIDENCE Summary of this function goes here
 %   Detailed explanation goes here
-    addpath('processing/');
+    addpath(genpath('processing/'));
     output = handles.data.epoched_data;
     data = handles.data;
     for i = 1:length(handles.data.processing_functions)

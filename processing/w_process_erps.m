@@ -41,7 +41,7 @@ roiStruct = DVT_P10_Anatomic(1);
 
 
 titleName = [path2save title_name_prefix];
-[erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = PlotERPSByROI2(roiStruct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
+[erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = plot_ERPS_by_ROI_2(roiStruct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
 
 eval(['save ' path2save title_name_prefix 'ERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);
 eval(['save ' path2save title_name_prefix 'ERPSOutputs_Complete.mat freqs timesout mbase g']);
