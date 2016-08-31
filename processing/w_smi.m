@@ -21,7 +21,7 @@ end
 
 data_range = start_point(1):end_point(1);
 
-[sym ,count ] = symbolic_transfer(selected_epoched_EEG.data,kernel, fs, taus, data_range,data.path,filename);
+[sym ,~ ] = symbolic_transfer(selected_epoched_EEG.data,kernel, fs, taus, data_range,data.path,filename);
 
 mutual_information(data.path, filename, sym, taus);
 

@@ -9,7 +9,7 @@ cfg.data_sel = data_sel;
 
 data = signal;
 
-[sym ,count ] = S_Transf(data,cfg);
+[sym ,count ] = s_transf(data,cfg);
 dir_st = fullfile(path,'Results','ST');
 if ~exist(dir_st,'dir')
     mkdir(dir_st);

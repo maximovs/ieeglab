@@ -8,4 +8,3 @@ end
 EEG.data = EEG.data(:,:,results);
 EEG.epoch = EEG.epoch(results);
 result_EEG = EEG;
-EEaux = 1;
