@@ -15,7 +15,7 @@ end
 % load([data.path empathy_for_pain])
 % baseline = str2num(baseline);
 
-path2save = fullfile(data.path,'ERPS2');
+path2save = fullfile(data.path,'ERPS');
 cycles = str2num(cycles); %FFT
 %cycles = [3 0.5]; %para usar wavelets
 frequencyRange = str2num(frequencyRange);
@@ -40,10 +40,10 @@ roiStruct = DVT_P10_Anatomic(1);
 
 
 
-titleName = [path2save title_name_prefix];
+titleName = fullfile(path2save, title_name_prefix);
 [erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = plot_ERPS_by_ROI_2(roiStruct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
 
-eval(['save ' path2save title_name_prefix 'ERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);
-eval(['save ' path2save title_name_prefix 'ERPSOutputs_Complete.mat freqs timesout mbase g']);
+eval(['save ' titleName 'ERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);
+eval(['save ' titleName 'ERPSOutputs_Complete.mat freqs timesout mbase g']);
 
 display('DONE')
