@@ -1,4 +1,4 @@
-function [EEG, data] = w_process_erps(cycles, frequencyRange, alpha, scale, basenorm, tlimits, tlimitsForBaseline, fdrCorrect, weightedSignificance, surroundingsWeight, erpsmax, marktimes, roi_struct_filename, title_name_prefix, EEG, data)
+function [EEG, data] = w_process_erps(cycles, frequencyRange, alpha, scale, basenorm, tlimits, tlimitsForBaseline, fdrCorrect, weightedSignificance, surroundingsWeight, erpsmax, marktimes, roi_struct_filename, roi_struct_name, title_name_prefix, EEG, data)
 epoched_EEG = EEG;
 if isfield(data,'selected_epoched_EEG')
     epoched_EEG = data.selected_epoched_EEG;
@@ -35,15 +35,15 @@ surroundingsWeight = str2num(surroundingsWeight);
 erpsmax = str2num(erpsmax);
 marktimes = str2num(marktimes);
 
-load(fullfile(data.path,'ERPS',roi_struct_filename));
-roiStruct = DVT_P10_Anatomic(1);
+f = load(fullfile(data.path,'ERPS',roi_struct_filename), roi_struct_name);
+roi_struct = f.(roi_struct_name);
 
 
 
 titleName = fullfile(path2save, title_name_prefix);
-[erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = plot_ERPS_by_ROI_2(roiStruct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
+[erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,Pboottrials] = plot_ERPS_by_ROI_2(roi_struct,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,tlimitsForBaseline,basenorm,erpsmax,marktimes);        
 
-eval(['save ' titleName 'ERPS_Complete.mat erpsMapsByTrialByROIs erpsByROIs']);
-eval(['save ' titleName 'ERPSOutputs_Complete.mat freqs timesout mbase g']);
+eval(['save ' titleName 'ERPS_complete.mat erpsMapsByTrialByROIs erpsByROIs']);
+eval(['save ' titleName 'ERPS_outputs_Complete.mat freqs timesout mbase g']);
 
 display('DONE')
