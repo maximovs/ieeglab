@@ -1,10 +1,5 @@
 function result_EEG = filter_epochs(epochs, EEG, data)
-results = 0;
-for i = 1:length(epochs(1,:))
-    epoch = epochs(i,:);
-    mask = arrayfun(@(x)strcmp(x, epoch), {EEG.epoch.eventtype});
-    results = results | mask;
-end
+results = calculate_epochs_mask(epochs, EEG, data);
 EEG.data = EEG.data(:,:,results);
 EEG.epoch = EEG.epoch(results);
 result_EEG = EEG;

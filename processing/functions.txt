@@ -1,5 +1,5 @@
-w_filter_epochs; Enter epochs
-test_params; Enter a number= 500; param2= 50; param3
-w_process_erps; cycles= 0; frequencyRange= [0 150]; alpha= 0; scale= abs; basenorm= 1; tlimits= [-250 1000]; tlimitsForBaseline= [-250 0]; fdrCorrect= 0; weightedSignificance= 0; surroundingsWeight= 0.5; erpsmax= [-8 8]; marktimes= []; roi_struct_filename= DVT_P10_Anatomic.mat; roi_struct_name= DVT_P10_Anatomic; title_name_prefix= Repossini
-w_smi; filename= Ignacio; data_range= [0 0.1]; kernel= 3; fs= 1024; taus= [1 2 4 8 16 32]
-w_plot_average_erps_band; condition_1= int; condition_2= neu; roi_struct_filename= DVT_P10_Anatomic.mat; tf_maps_filename, tf_variables_filename, frequency_bands, title_names, p_value, colorPvalue, color1, color2, statmethod, prefix_file_name
+w_filter_epochs| Enter epochs
+test_params| Enter a number= 500| param2= 50| param3
+w_process_erps| cycles= 0| frequencyRange= [0 150]| alpha= 0| scale= abs| basenorm= 1| tlimits= [-250 1000]| tlimitsForBaseline= [-250 0]| fdrCorrect= 0| weightedSignificance= 0| surroundingsWeight= 0.5| erpsmax= [-8 8]| marktimes= []| roi_struct_filename= DVT_P10_Anatomic.mat| roi_struct_name= DVT_P10_Anatomic| title_name_prefix= Ignacio
+w_smi| filename= Ignacio| data_range= [0 0.1]| kernel= 3| fs= 1024| taus= [1 2 4 8 16 32]
+w_plot_average_erps_band| condition_1= int| condition_2= neu| roi_struct_filename= DVT_P10_Anatomic.mat| roi_struct_name= DVT_P10_Anatomic| erps_files_prefix= Ignacio| frequency_bands= [1 4;4 8;8 13;13 30;30 45;45 80;80 150]| title_names= delta theta alpha beta lowgamma highgamma broadband| p_value= 0.05| colorPvalue= g| color1= [1 0 0]| color2= [0 0 1]| statmethod= boot| prefix_file_name
