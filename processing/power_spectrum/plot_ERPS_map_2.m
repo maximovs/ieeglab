@@ -12,7 +12,6 @@ for num = channels
     counter = counter + 1;
     [P,R,mbase,timesout,freqs,Pboot,Rboot,alltfX,PA,ERP,maskersp, maskitc, g,Pboottrials] = my_pop_new_timef_2(EEG, typeproc, num, tlimits, cycles, frequencyRange,alpha,fdrCorrect,scale,baseline,basenorm,erpsMax,marktimes, 'plotitc' , 'off', 'plotphase', 'off', 'padratio', 1,'mcorrect','fdr');
                                                                                                                                                 
-    %pop_newtimef(EEG, 1, canal, epoch_window*1000 + [0 100], [3 0.5] , 'alpha',0.05, 'freqs', [0 150], 'plotitc' , 'off', 'plotphase', 'off', 'padratio', 1);
     erpsMaps(:,:,counter) = P;
     if ~isempty(Pboottrials)
         Pboottrialstotal(:,:,counter) = Pboottrials;

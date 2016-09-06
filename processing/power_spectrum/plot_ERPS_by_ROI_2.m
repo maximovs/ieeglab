@@ -1,6 +1,4 @@
 function [erpsMapsByTrialByROIs,erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout, mbase, maskersp, maskitc, g,PboottrialsByROI] = plot_ERPS_by_ROI_2(patientROI,EEG,tlimits,cycles,frequencyRange,alpha,fdrCorrect,titleName,weightedSignificance,surroundingsWeight,scale,baseline,basenorm,erpsMax,marktimes)
-%function [erpsByROIs, meanERPSMap, R, Pboot, Rboot, ERP, freqs, timesout,
-%mbase, maskersp, maskitc, g] = PlotERPSByROI(patientROI,EEG,tlimits,frequencyRange,titleName)
 
 erpsByROIs = [];
 PboottrialsByROI = [];

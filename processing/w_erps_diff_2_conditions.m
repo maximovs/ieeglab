@@ -1,21 +1,11 @@
 function [ EEG, data ] = w_erps_diff_2_conditions( condition_1, condition_2, roi_struct_filename, roi_struct_name, files_prefix, tlimits, cycles, frequency_range, alpha, fdr_correct, weighted_significance, surroundings_weight, scale, basenorm, tlimits_for_baseline, erps_max, mark_times, path_to_save, EEG, data )
 
-%CONDITION SELECTION!!!!!! - ACÁ TENGO QUE ELEGIR LOS TRIALS QUE INCLUYO
-%BASADO EN LOS REMARCADOS ----- COMO HACEMOS PARA TENER ESTO???
-% load 'Faces.mat'
-% cond1 = data;
-% load 'Words.mat'
-% cond2 = data;
-
-% condition_1 = 'Faces';
-% condition_2 = 'Words';
-
-% files_prefix = 'P9';
-
 if isequal(path_to_save,'')
     path_to_save = fullfile(data.path, 'ERPS', 'FFTComplete');
 end
-% roi_struct = load('ERPS\DVT_P9_Anatomic.mat');
+if ~exist(path_to_save, 'dir')
+  mkdir(path_to_save);
+end
 
 f = load(fullfile(data.path,'ERPS',roi_struct_filename), roi_struct_name);
 roi_struct = f.(roi_struct_name);
@@ -36,8 +26,6 @@ mark_times = str2num(mark_times);%[];
 
 %----RUN-------------------------------------------------------------------
 
-% eeglab %NO SE SI ES NECESARIO
 plot_ERPS_for_2_conditions_and_difference(condition_1,condition_2,files_prefix, path_to_save,roi_struct,tlimits,cycles,frequency_range,alpha,fdr_correct,weighted_significance,surroundings_weight,scale,tlimits_for_baseline,basenorm,erps_max,mark_times, EEG, data)
 
-display('DONE Faces and Words')
-close all
+display('DONE w_erps_diff_2_conditions')

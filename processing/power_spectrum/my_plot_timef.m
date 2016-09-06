@@ -1,4 +1,4 @@
-function g = my_plot_timef(titleName,P, R, Pboot, Rboot, ERP, freqs, times, mbase, maskersp, maskitc, g);
+function g = my_plot_timef(titleName,P, R, Pboot, Rboot, ERP, freqs, times, mbase, maskersp, maskitc, g)
 %
 % compute ERP
 %

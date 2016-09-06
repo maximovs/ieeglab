@@ -1,5 +1,21 @@
 function plot_collapsed_ERPS_by_subject(matInt,matAcc,timesout,statmethod,p_value,prefixFileName,titleName,color1,color2,colorPvalue)
-%matInt y matAcc tienen 3 dimensiones: freqs x time x trials
+%Calculates and plots the mean ERPS for two conditions and its statistical
+%analysis. Input matrices MUST contain the desired frequency band in the
+%first dimension (this method does not select frequency values).
+
+% INPUTS:
+% * mat1: 3D (frequency x time x trials) mat for condition 1
+% * mat2: 3D (frequency x time x trials) mat for condition 2
+% * timesout: vector with time values of calculated time-frequency maps
+% * statmethod: string of the statistical method to be used (possible values: boot or
+% ranksum)
+% * p_value: threshold of statistical significance (e.g. p = 0.05)
+% prefixFileName: string that will be appended to titleName as the filename
+% that will be saved (possibly the path)
+% titleName: title for plot
+% color1: color of plot for condition 1
+% color2: color of plot for condition 2
+% colorPvalue: color of plot for significant points (those below p_value)
 
 %promedio por frecuencias
 meanInt = squeeze(mean(matInt,1));

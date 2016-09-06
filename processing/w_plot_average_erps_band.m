@@ -3,9 +3,6 @@ function [ EEG, data ] = w_plot_average_erps_band( condition_1, condition_2, roi
 %ERPS matrix for each frequency band and calls PlotCollapsedERPSBySubject
 %to plot average frequency for each conditions with statistical analyses.
 
-
-% addpath(genpath('C:\Program Files\MATLAB\R2010a\toolbox\stats'))
-
 % w_ PARAMETERS
 % roi_struct_filename = 'EmpathyForPain_P9_Bipolar.mat';
 % tf_variables_filename = 'RetentionFacesInputsNewFFTBaseline.mat'; % Calculted parameters from time frequency analysis from other function (w_process_erps)
@@ -24,11 +21,9 @@ p_value = str2num(p_value);%0.05;
 color1 = str2num(color1);%[1 0 0]; %red         
 color2 = str2num(color2);%[0 0 1]; %blue  
 
-% prefixFileName = 'G:\Ineco Transicion\Procesamiento de Señales\Resultados\Paciente9_AlfredoFarinelli\Integracion\CollapsedERPS\NewFFT0.05\';
 if isequal(prefix_file_name,'')
     prefix_file_name = fullfile(data.path, 'ERPS', 'average_band');
 end
-% statmethod = 'boot';
 
 %----------RUN------------------------------------------------------------
 f = load(fullfile(data.path,'ERPS',roi_struct_filename), roi_struct_name);
@@ -83,4 +78,4 @@ for f = 1 : size(frequency_bands,1)
     end
 end
 
-display('DONE')
+display('DONE w_plot_average_erps_band')

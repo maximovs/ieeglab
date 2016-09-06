@@ -5,7 +5,9 @@ function [ EEG, data ] = w_erps_diff_3_conditions( condition_1, condition_2, con
 if isequal(path_to_save,'')
     path_to_save = fullfile(data.path, 'ERPS', 'FFTComplete');
 end
-% roi_struct = load('ERPS\DVT_P9_Anatomic.mat');
+if ~exist(path_to_save, 'dir')
+  mkdir(path_to_save);
+end
 
 f = load(fullfile(data.path,'ERPS',roi_struct_filename), roi_struct_name);
 roi_struct = f.(roi_struct_name);
@@ -25,8 +27,6 @@ erps_max = str2num(erps_max);%[-15 15];
 mark_times = str2num(mark_times);%[];
 
 
-%----RUN-------------------------------------------------------------------
+%----RUN----------------------------------------------------------------(condition_1,condition_2,condition_3,files_prefix, path_to_save,roi_struct,tlimits,cycles,frequency_range,alpha,fdr_correct,weighted_significance,surroundings_weight,scale,tlimits_for_baseline,basenorm,erps_max,mark_times, EEG, data)
 
-plot_ERPS_for_3_conditions_and_difference(condition_1,condition_2,condition_3,files_prefix, path_to_save,roi_struct,tlimits,cycles,frequency_range,alpha,fdr_correct,weighted_significance,surroundings_weight,scale,tlimits_for_baseline,basenorm,erps_max,mark_times, EEG, data)
-
-display('DONE Faces')
+display('DONE w_erps_diff_3_conditions')
