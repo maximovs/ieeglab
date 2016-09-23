@@ -27,6 +27,7 @@ erps_max = str2num(erps_max);%[-15 15];
 mark_times = str2num(mark_times);%[];
 
 
-%----RUN----------------------------------------------------------------(condition_1,condition_2,condition_3,files_prefix, path_to_save,roi_struct,tlimits,cycles,frequency_range,alpha,fdr_correct,weighted_significance,surroundings_weight,scale,tlimits_for_baseline,basenorm,erps_max,mark_times, EEG, data)
+%----RUN----------------------------------------------------------------
+plot_ERPS_for_3_conditions_and_difference(condition_1,condition_2,condition_3,files_prefix, path_to_save,roi_struct,tlimits,cycles,frequency_range,alpha,fdr_correct,weighted_significance,surroundings_weight,scale,tlimits_for_baseline,basenorm,erps_max,mark_times, EEG, data)
 
 display('DONE w_erps_diff_3_conditions')
