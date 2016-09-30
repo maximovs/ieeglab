@@ -146,7 +146,7 @@ preprocessing_function.pos = handles.data.current_preprocessing_function.pos;
 preprocessing_function.params = {};
 input = handles.data.preprocessing_input{handles.data.current_preprocessing_function.pos};
 if ~isempty(input(:,1))
-    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
     if ~isempty(answer)
         preprocessing_function.params = answer;
     else
@@ -205,7 +205,7 @@ handles.data.epoching_function.params = {};
 input = handles.data.epoching_input{handles.data.epoching_function.pos};
 handles.data.epoching_function.input = input;
 if ~isempty(input(:,1))
-    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
     if ~isempty(answer)
         handles.data.epoching_function.params = answer;
     else
@@ -231,7 +231,7 @@ if isfield(handles.data.epoching_function,'params')
     params = handles.data.epoching_function.params;
 end
 if ~isempty(input(:,1))
-    answer = inputdlg(input(:,1),'Ingrese parametros', 1, params);
+    answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, params);
     if ~isempty(answer)
         handles.data.epoching_function.params = answer;
         handles.data.data_status = min(1,handles.data.data_status);
@@ -248,7 +248,7 @@ if isfield(handles.data,'current_processing_function_to_delete')
     processing_function = handles.data.processing_functions{handles.data.current_processing_function_to_delete};
     input = handles.data.processing_input{processing_function.pos};
     if ~isempty(input(:,1))
-        answer = inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
+        answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
         if ~isempty(answer)
             processing_function.params = answer;
             handles.data.processing_functions{handles.data.current_processing_function_to_delete} = processing_function;
@@ -278,7 +278,7 @@ processing_function.pos = handles.data.current_processing_function.pos;
 processing_function.params = {};
 input = handles.data.processing_input{handles.data.current_processing_function.pos};
 if ~isempty(input(:,1))
-    answer = inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
+    answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, input(:,2));
     if ~isempty(answer)
         processing_function.params = answer;
     else
@@ -303,7 +303,7 @@ processing_function.pos = get_first_coincidence(get(handles.processing_select_me
 processing_function.params = {strjoin(unique({handles.data.epoched_data.epoch.eventtype}))};
 input = handles.data.processing_input{handles.data.current_processing_function.pos};
 if ~isempty(input(:,1))
-    answer = inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
+    answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
     if ~isempty(answer)
         processing_function.params = answer;
     else
@@ -475,7 +475,7 @@ if ~ isfield(handles.data,'channels_to_discard')
     data = calculate_channels_to_discard(handles);
     handles.data.channels_to_discard = data.channels_to_discard;
 end
-answer = inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
+answer = dynamic_inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
 if ~isempty(answer)
     handles.data.channels_to_discard = str2num(answer{1});
 end

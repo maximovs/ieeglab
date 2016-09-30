@@ -12,13 +12,9 @@ function [ str, input_variables ] = read_file_by_lines( filename )
         disp(tline)
         split_tline = strsplit(tline, '| ');
         if isequal(str,'')
-            str = split_tline{1};
+            str = split_tline(1);
         else
-            if ispc
-                str = [str char(13) char(10) split_tline{1}];
-            else
-                str = [str char(10) split_tline{1}];
-            end
+            str{length(str)+1} = split_tline{1};
         end
         aux = cell(length(split_tline)-1, 2);
         for j = 1:length(split_tline)-1

@@ -8,7 +8,7 @@ function [ output, data ] = execute_epoching( handles)
     if ~isfield(handles.data.epoching_function,'params')
         input = handles.data.epoching_input{handles.data.epoching_function.pos};
         if ~isempty(input(:,1))
-            answer = inputdlg(input(:,1),'Epoching Parameters', 1, input(:,2));
+            answer = dynamic_inputdlg(input(:,1),'Epoching Parameters', 1, input(:,2));
             if ~isempty(answer)
                 handles.data.epoching_function.params = answer;
                 guidata(handles.epoching_select_menu,handles);
