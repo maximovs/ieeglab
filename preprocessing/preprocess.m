@@ -12,10 +12,7 @@ function [EEG, data] = preprocess(labelFileName,channels2Delete,notchHz,notchWid
 
 
 %remove bad channels
-EEG.data(channels2Delete,:) = [];
-EEG.chanlocs(channels2Delete,:) = [];
-EEG.nbchan = size(EEG.data, 1);
-
+EEG = discard_channels(channels2Delete, EEG);
 % eeglab redraw
 
 %print channel labels

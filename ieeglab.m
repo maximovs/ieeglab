@@ -22,7 +22,7 @@ function varargout = ieeglab(varargin)
 
 % Edit the above text to modify the response to help ieeglab
 
-% Last Modified by GUIDE v2.5 30-Sep-2016 12:36:17
+% Last Modified by GUIDE v2.5 30-Sep-2016 15:13:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,6 +81,7 @@ data.processing_input = input;
 set(handles.processing_select_menu, 'String', str);
 [data.current_processing_function.str, data.current_processing_function.pos] = get_current_popup_string(handles.processing_select_menu);
 
+set(handles.figure1,'CloseRequestFcn',@close_GUI);
 
 handles.data = data;
 load_handles(handles);
@@ -114,7 +115,7 @@ function File_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function new_project_Callback(hObject, eventdata, handles)
-[file_name, path] = uiputfile;
+[file_name, path] = uiputfile('*.mat','Save Workspace As');
 if file_name
     handles.data.file_name = file_name;
     handles.data.path = path;
@@ -380,15 +381,24 @@ handles.data.data_status = min(1,handles.data.data_status);
 
 % --------------------------------------------------------------------
 function run_processing_Callback(hObject, eventdata, handles)
-    run_processing(hObject, handles);
+    handles = run_processing(hObject, handles);
+    if handles.data.data_status == 3
+        msgbox('Processing finished!','Success')
+    end
 
 % --------------------------------------------------------------------
 function run_epoching_Callback(hObject, eventdata, handles)
-    run_epoching(hObject, handles);
+    handles = run_epoching(hObject, handles);
+    if handles.data.data_status == 2
+        msgbox('Epoching finished!','Success')
+    end
 
 % --------------------------------------------------------------------
 function run_preprocessing_Callback(hObject, eventdata, handles)
-    run_preprocessing(hObject, handles);
+    handles = run_preprocessing(hObject, handles);
+    if handles.data.data_status == 1
+        msgbox('Preprocessing finished!','Success')
+    end
 
 function [handles] = run_preprocessing(hObject, handles)
     if ~isfield(handles.data,'path')
@@ -404,9 +414,6 @@ function [handles] = run_preprocessing(hObject, handles)
             return
         end
     end
-%     t = 0:1/5:20;
-%     handles.data.data = sin(2*pi*t*300);
-%     handles.data.data = handles.data.EEG.data;
     [result, data] = execute_preprocessing(handles);
     handles.data = data;
     handles.data.preprocessed_data = result;
@@ -491,6 +498,8 @@ end
 answer = inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
 if ~isempty(answer)
     handles.data.channels_to_discard = str2num(answer{1});
+    handles.data.data_status = 0;
+    msgbox('Channels will be discarded after running w_preprocess.','Success')
 end
 guidata(hObject,handles)
 
@@ -511,3 +520,32 @@ if isfield(handles.data,'preprocessed_data')
         figure; pop_spectopo(EEG, 1, [EEG.xmin*1000 EEG.xmax*1000], 'EEG' , 'percent', str2num(answer{1}), 'freqrange',str2num(answer{2}),'electrodes','off');
     end
 end
+
+function close_GUI(hObject, eventdata, handles)
+    handles = guidata(hObject);
+    selection = questdlg('Do you want to save changes?', ...
+	'Warning', ...
+	'Yes','No','No');
+    switch selection
+        case 'Yes'
+            if ~isfield(handles.data,'path')
+                [file_name, path] = uiputfile;
+                if file_name
+                    handles.data.file_name = file_name;
+                    handles.data.path = path;
+                else
+                    return
+                end
+            end
+            save_file(handles);
+            delete(gcf)
+        case 'No'
+            delete(gcf)
+    end
+
+
+% --------------------------------------------------------------------
+function load_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to load_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

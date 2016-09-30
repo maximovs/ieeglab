@@ -22,9 +22,12 @@ if epoch_window(1) ~= 0
 end
 
 if ~isequal(file2save,'')
+    file_to_save = fullfile(data.path, [file2save '.mat']);
+    old_data = data;
     data = EEG.data;
-    str = ['save ' data.path file2save '.mat data;'];
+    str = ['save ' file_to_save ' data;'];
     eval(str)
+    data = old_data;
 end
 end
 
