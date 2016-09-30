@@ -401,6 +401,7 @@ function [handles] = run_preprocessing(hObject, handles)
             guidata(hObject,handles)
         else
             msgbox('You must save the project before executing scripts.','Error')
+            return
         end
     end
 %     t = 0:1/5:20;
