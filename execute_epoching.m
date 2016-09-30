@@ -21,6 +21,8 @@ function [ output, data ] = execute_epoching( handles)
         end
     end
     arguments = handles.data.epoching_function.params;
+    inputs = handles.data.epoching_input{handles.data.epoching_function.pos};
+    log_to_file(handles.data.epoching_function.str, inputs(:,1), arguments, data.path);
     if ~isempty([arguments{:}])
         arguments{end+1} = output;
         arguments{end+1} = data;

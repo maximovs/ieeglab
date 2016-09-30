@@ -8,6 +8,8 @@ function [ output, data ] = execute_processing( handles)
         processing_function = handles.data.processing_functions{i};
         f = str2func(processing_function.str);
         arguments = processing_function.params;
+        inputs = handles.data.processing_input{processing_function.pos};
+        log_to_file(processing_function.str, inputs(:,1), arguments, data.path);
         if ~isempty([arguments{:}])
             arguments{end+1} = output;
             arguments{end+1} = data;

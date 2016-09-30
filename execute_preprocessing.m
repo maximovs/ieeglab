@@ -8,6 +8,8 @@ function [ output, data ] = execute_preprocessing( handles)
         preprocessing_function = handles.data.preprocessing_functions{i};
         f = str2func(preprocessing_function.str);
         arguments = preprocessing_function.params;
+        inputs = handles.data.preprocessing_input{preprocessing_function.pos};
+        log_to_file(preprocessing_function.str, inputs(:,1), arguments, data.path);
         if ~isempty([arguments{:}])
             arguments{end+1} = output;
             arguments{end+1} = data;
