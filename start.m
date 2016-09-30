@@ -55,6 +55,7 @@ addpath('/Users/maximo/Documents/MATLAB/tesis/fieldtrip-20160726');
 ft_defaults
 addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/eeglab13_5_4b'));
 addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
+addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/BrainNetViewer_20150807'));
 
 data = struct();
 
@@ -175,7 +176,7 @@ if isfield(handles.data,'current_preprocessing_function_to_delete')
     preprocessing_function = handles.data.preprocessing_functions{handles.data.current_preprocessing_function_to_delete};
     input = handles.data.preprocessing_input{preprocessing_function.pos};
     if ~isempty(input(:,1))
-        answer = inputdlg(input(:,1),'Ingrese parametros', 1, preprocessing_function.params);
+        answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, preprocessing_function.params);
         if ~isempty(answer)
             preprocessing_function.params = answer;
             handles.data.preprocessing_functions{handles.data.current_preprocessing_function_to_delete} = preprocessing_function;
