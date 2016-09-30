@@ -1,35 +1,35 @@
-function varargout = start(varargin)
-% START MATLAB code for start.fig
-%      START, by itself, creates a new_project START or raises the existing
+function varargout = ieeglab(varargin)
+% IEEGLAB MATLAB code for ieeglab.fig
+%      IEEGLAB, by itself, creates a new_project IEEGLAB or raises the existing
 %      singleton*.
 %
-%      H = START returns the handle to a new_project START or the handle to
+%      H = IEEGLAB returns the handle to a new_project IEEGLAB or the handle to
 %      the existing singleton*.
 %
-%      START('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in START.M with the given input arguments.
+%      IEEGLAB('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in IEEGLAB.M with the given input arguments.
 %
-%      START('Property','Value',...) creates a new_project START or raises the
+%      IEEGLAB('Property','Value',...) creates a new_project IEEGLAB or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before start_OpeningFcn gets called.  An
+%      applied to the GUI before ieeglab_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to start_OpeningFcn via varargin.
+%      stop.  All inputs are passed to ieeglab_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help start
+% Edit the above text to modify the response to help ieeglab
 
-% Last Modified by GUIDE v2.5 20-Jul-2016 11:17:55
+% Last Modified by GUIDE v2.5 30-Sep-2016 12:36:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @start_OpeningFcn, ...
-                   'gui_OutputFcn',  @start_OutputFcn, ...
+                   'gui_OpeningFcn', @ieeglab_OpeningFcn, ...
+                   'gui_OutputFcn',  @ieeglab_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,13 +44,13 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before start is made visible.
-function start_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before ieeglab is made visible.
+function ieeglab_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to start (see VARARGIN)
+% varargin   command line arguments to ieeglab (see VARARGIN)
 addpath('/Users/maximo/Documents/MATLAB/tesis/fieldtrip-20160726');
 ft_defaults
 addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/eeglab13_5_4b'));
@@ -84,18 +84,18 @@ set(handles.processing_select_menu, 'String', str);
 
 handles.data = data;
 load_handles(handles);
-% Choose default command line output for start
+% Choose default command line output for ieeglab
 handles.output = hObject;
  
 % Update handles structure
 guidata(hObject, handles);
  
-% UIWAIT makes start wait for user response (see UIRESUME)
+% UIWAIT makes ieeglab wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = start_OutputFcn(hObject, eventdata, handles) 
+function varargout = ieeglab_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -391,8 +391,20 @@ function run_preprocessing_Callback(hObject, eventdata, handles)
     run_preprocessing(hObject, handles);
 
 function [handles] = run_preprocessing(hObject, handles)
-    t = 0:1/5:20;
-    handles.data.data = sin(2*pi*t*300);
+    if ~isfield(handles.data,'path')
+        [file_name, path] = uiputfile;
+        if file_name
+            handles.data.file_name = file_name;
+            handles.data.path = path;
+            save_file( handles);
+            load_handles(handles);
+            guidata(hObject,handles)
+        else
+            msgbox('You must save the project before executing scripts.','Error')
+        end
+    end
+%     t = 0:1/5:20;
+%     handles.data.data = sin(2*pi*t*300);
 %     handles.data.data = handles.data.EEG.data;
     [result, data] = execute_preprocessing(handles);
     handles.data = data;
@@ -475,7 +487,7 @@ if ~ isfield(handles.data,'channels_to_discard')
     data = calculate_channels_to_discard(handles);
     handles.data.channels_to_discard = data.channels_to_discard;
 end
-answer = dynamic_inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
+answer = inputdlg('Canales a descartar','Ingrese parametros', 5, {mat2str(handles.data.channels_to_discard)});
 if ~isempty(answer)
     handles.data.channels_to_discard = str2num(answer{1});
 end
@@ -498,5 +510,3 @@ if isfield(handles.data,'preprocessed_data')
         figure; pop_spectopo(EEG, 1, [EEG.xmin*1000 EEG.xmax*1000], 'EEG' , 'percent', str2num(answer{1}), 'freqrange',str2num(answer{2}),'electrodes','off');
     end
 end
-
-
