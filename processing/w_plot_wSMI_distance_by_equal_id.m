@@ -43,7 +43,7 @@ end
 for i = 1 : size(taus,2)
 %for i = 1 : 1
     completeFileName = fullfile(path_to_save, [file_name '-Distance-tau-' int2str(taus(1,i))]);
-    tau = i;    
+    tau = taus(i);
     PlotWSMIDistanceByEqualD(task_name,condition_1,condition_2,tau,wsmi_path,file_name,channelNr,electrodeDistances,p_value,threshold,completeFileName);
 end
 

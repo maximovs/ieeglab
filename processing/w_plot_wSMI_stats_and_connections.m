@@ -61,7 +61,7 @@ for cond = 1 : size(conditions_1,2)
         end
         new_file_name = fullfile(folder, [condition1 '-' condition2 '-tau-' int2str(taus(1,tau))]);
         
-        PlotwSMIStatsAndConnections(wsmi_path,condition1,condition2,channel_nr,tau,p_value,method,plot_stats_aux,threshold,electrodes,color_positive,color_negative,node_spec,new_file_name)
+        plot_wSMI_stats_and_connections(wsmi_path,condition1,condition2,channel_nr,tau,p_value,method,plot_stats_aux,threshold,electrodes,color_positive,color_negative,node_spec,new_file_name)
     end
 end
 

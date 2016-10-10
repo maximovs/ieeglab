@@ -9,7 +9,6 @@ function [ str, input_variables ] = read_file_by_lines( filename )
     tline = fgetl(fileID);
     input_variables = cell(0);
     while ischar(tline)
-        disp(tline)
         split_tline = strsplit(tline, '| ');
         if isequal(str,'')
             str = split_tline(1);

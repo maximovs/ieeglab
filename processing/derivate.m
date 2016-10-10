@@ -3,6 +3,5 @@ function [ output_args ] = derivate( input_args )
 %   Detailed explanation goes here
 d = diff(input_args);
 output_args = [d d(end)];
-
 end
 

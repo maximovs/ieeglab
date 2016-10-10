@@ -1,4 +1,4 @@
-function PlotConnMatrixStatisticalGraphs(P,T,p_value,threshold,labels,base_file_name)
+function plot_conn_matrix_statistical_graphs(P,T,p_value,threshold,labels,base_file_name)
 
 Tmin = -1*threshold;
 Tmax = threshold;
@@ -17,12 +17,12 @@ ResultMatrix = signifMask;
 caxisValues = [Tmin Tmax];
 PfileName = [base_file_name '_Tsignificancemask'];
 %PlotMap(signifMask,labels,caxisValues,PfileName); 
-PlotFormattedMap(signifMask,labels,caxisValues,'jet',PfileName,PfileName,1); 
+plot_formatted_map(signifMask,labels,caxisValues,'jet',PfileName,PfileName,1); 
 
 caxisValues = [Tmin Tmax];
 PfileName = [base_file_name '_TsignificancemaskCOMPLETE'];
 %PlotMap(signifMask,labels,caxisValues,PfileName); 
-PlotFormattedMap(signifVals,labels,caxisValues,'jet',PfileName,PfileName,1); 
+plot_formatted_map(signifVals,labels,caxisValues,'jet',PfileName,PfileName,1); 
 
 %plot histogram of significant values
 signifValsT = T.*T_signif;

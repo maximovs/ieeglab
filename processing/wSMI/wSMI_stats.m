@@ -1,11 +1,11 @@
-function [tsignificantMat,t,p] = wSMIStats(path,condition1,condition2,tau,channelNr,method,alpha)
+function [tsignificantMat,t,p] = wSMI_stats(path,condition1,condition2,tau,channelNr,method,alpha)
 %returns channelNr*channelNr statistical matrix with t values for selected
 %method and be optionally be printed as .edge
 
 %matrix C1 and C2 must have same size
-[C1] = LoadwSMIConnectivityMatrix(path,condition1,tau,channelNr);
+[C1] = load_wSMI_connectivity_matrix(path,condition1,tau,channelNr);
 
-[C2] = LoadwSMIConnectivityMatrix(path,condition2,tau,channelNr);
+[C2] = load_wSMI_connectivity_matrix(path,condition2,tau,channelNr);
 
 significantMat = zeros(size(C1,1),size(C1,1));
 

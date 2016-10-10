@@ -1,4 +1,4 @@
-function PlotwSMIStatsAndConnections(wsmi_path,condition1,condition2,channel_nr,tau,p_value,method,plot_stats_aux,threshold,electrodes,color_positive,color_negative,node_spec,new_file_name)
+function plot_wSMI_stats_and_connections(wsmi_path,condition1,condition2,channel_nr,tau,p_value,method,plot_stats_aux,threshold,electrodes,color_positive,color_negative,node_spec,new_file_name)
 %Loads connectivity matrices for two conditions and performs a statistical
 %comparison between them. Then plots the significant connections in 3D.
 %Optionally plots histograms of statistical data and matrices.
@@ -42,12 +42,12 @@ node_spec(2).condition = 'other';
 node_spec(2).size = '2';
 node_spec(2).color = '';
 
-[tsignificantMat,t,p] = wSMIStats(wsmi_path,condition1,condition2,tau,channel_nr,method,p_value);
+[tsignificantMat,t,p] = wSMI_stats(wsmi_path,condition1,condition2,tau,channel_nr,method,p_value);
 
 %plot matrix of  T values and histograms
 if plot_stats_aux == 1
-    PlotConnMatrixStatisticalGraphs(p,t,p_value,threshold,electrodes.labels,new_file_name)
+    plot_conn_matrix_statistical_graphs(p,t,p_value,threshold,electrodes.labels,new_file_name)
 end
 
 %plot values above threshold on 3D head plot
-StatHeadPlotForTwoConditions(tsignificantMat,threshold,color_positive,color_negative,electrodes,node_spec,new_file_name)
+stat_head_plot_for_two_conditions(tsignificantMat,threshold,color_positive,color_negative,electrodes,node_spec,new_file_name)

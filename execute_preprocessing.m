@@ -1,7 +1,7 @@
 function [ output, data ] = execute_preprocessing( handles)
 %GET_FIRST_COINCIDENCE Summary of this function goes here
 %   Detailed explanation goes here
-    addpath('preprocessing/');
+    addpath(fullfile(handles.data.ieeglab_path,'preprocessing'));
     output = handles.data.EEG;
     data = handles.data;
     for i = 1:length(handles.data.preprocessing_functions)

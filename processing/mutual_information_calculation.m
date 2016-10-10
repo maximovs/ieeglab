@@ -12,8 +12,8 @@ taus = 1:length(taus);
    load(file)
 
    for tau = taus
-    size(sym{tau},1)
-    size(sym{tau},1)-1
+%     size(sym{tau},1)
+%     size(sym{tau},1)-1
        wSMI.trMEAN{tau} = zeros(size(sym{tau},1)*(size(sym{tau},1)-1)/2,1);       
        wSMI.MEAN{tau} = zeros(size(sym{tau},1)*(size(sym{tau},1)-1)/2,1);       
        wSMI.MEDIAN{tau} = zeros(size(sym{tau},1)*(size(sym{tau},1)-1)/2,1);       
@@ -47,16 +47,13 @@ taus = 1:length(taus);
        
    %%% PE calculation
    
-   disp('MI calculation')
+       disp('MI calculation')
    
-   for trial = 1:size(sym{tau},3)
-       
-       disp([file ' - tau:' num2str(2^(tau-1)) ', trial ' num2str(trial) ' of ' num2str(size(sym{tau},3))])
-   
-   %[AUX(:,trial) AUX2(:,:,trial)] = MI2_matrix_save(sym{tau}(:,:,trial),count{tau}(:,:,trial),3,1);
-   [AUX1(:,trial),AUX2(:,trial),AUX3(:,trial),AUX4(:,trial)] = MI_SMI_and_wSMI(sym{tau}(:,:,trial),count{tau}(:,:,trial),3);
-   
-   end
+       for trial = 1:size(sym{tau},3)
+           disp([file ' - tau:' num2str(2^(tau-1)) ', trial ' num2str(trial) ' of ' num2str(size(sym{tau},3))])
+           %[AUX(:,trial) AUX2(:,:,trial)] = MI2_matrix_save(sym{tau}(:,:,trial),count{tau}(:,:,trial),3,1);
+           [AUX1(:,trial),AUX2(:,trial),AUX3(:,trial),AUX4(:,trial)] = MI_SMI_and_wSMI(sym{tau}(:,:,trial),count{tau}(:,:,trial),3);
+       end
    
        wSMI.trMEAN{tau} = trimmean(AUX2,90,'round',2);       
        wSMI.MEAN{tau}   = nanmean(AUX2,2);       
@@ -97,7 +94,7 @@ taus = 1:length(taus);
    %fileout =   ['MATRIX_final_' file(29:39)];
    %save(fileout,'MATRIX')
       
-time = toc   ;
+time = toc;
 
 end
 

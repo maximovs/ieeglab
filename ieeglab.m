@@ -51,32 +51,29 @@ function ieeglab_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to ieeglab (see VARARGIN)
-addpath('/Users/maximo/Documents/MATLAB/tesis/fieldtrip-20160726');
-ft_defaults
-addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/eeglab13_5_4b'));
-addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
-addpath(genpath('/Users/maximo/Documents/MATLAB/tesis/BrainNetViewer_20150807'));
+% addpath(genpath('/Users/maximo/Documents/MATLAB/ieeg/Scripts'));
 
 data = struct();
 
 data.data_status = 0;
-
+[pathstr,~,~] = fileparts(which('ieeglab'));
+data.ieeglab_path = pathstr;
 %LOAD preprocessing
 data.preprocessing_functions = cell(0);
-[str, input] = read_file_by_lines('preprocessing/functions.txt');
+[str, input] = read_file_by_lines(fullfile(data.ieeglab_path,'preprocessing','functions.txt'));
 data.preprocessing_input = input;
 set(handles.preprocessing_function_select_menu, 'String', str);
 [data.current_preprocessing_function.str, data.current_preprocessing_function.pos] = get_current_popup_string(handles.preprocessing_function_select_menu);
 
 %LOAD epoching
-[str, input] = read_file_by_lines('epoching/functions.txt');
+[str, input] = read_file_by_lines(fullfile(data.ieeglab_path,'epoching','functions.txt'));
 set(handles.epoching_select_menu, 'String', str);
 data.epoching_input = input;
 [data.epoching_function.str, data.epoching_function.pos] = get_current_popup_string(handles.epoching_select_menu);
 
 %LOAD processing
 data.processing_functions = cell(0);
-[str, input] = read_file_by_lines('processing/functions.txt');
+[str, input] = read_file_by_lines(fullfile(data.ieeglab_path,'processing','functions.txt'));
 data.processing_input = input;
 set(handles.processing_select_menu, 'String', str);
 [data.current_processing_function.str, data.current_processing_function.pos] = get_current_popup_string(handles.processing_select_menu);
@@ -302,7 +299,7 @@ end
 processing_function.str = 'w_filter_epochs';
 processing_function.pos = get_first_coincidence(get(handles.processing_select_menu, 'String'),'w_filter_epochs');
 processing_function.params = {strjoin(unique({handles.data.epoched_data.epoch.eventtype}))};
-input = handles.data.processing_input{handles.data.current_processing_function.pos};
+input = handles.data.processing_input{processing_function.pos};
 if ~isempty(input(:,1))
     answer = dynamic_inputdlg(input(:,1),'Ingrese parametros', 1, processing_function.params);
     if ~isempty(answer)

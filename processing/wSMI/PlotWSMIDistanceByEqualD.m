@@ -63,18 +63,23 @@ M.C2 = C2;
 
 C_1 = C1;
 C_2 = C2;
-
 C_1(isnan(C_1)) = 0;
 C_2(isnan(C_2)) = 0;
+for i = 1:size(C1,3)
+C_1(:,:,i) = triu(C_1(:,:,i)) - tril(ones(size(C_1(:,:,i)))).*2;
+C_2(:,:,i) = triu(C_2(:,:,i)) - tril(ones(size(C_2(:,:,i)))).*2;
+end
+
+
 
 %en C_1 y C_2 tengo una matriz de channelNr*channelNr*trials para cada
 %condicion
 
 %me quedo con el triangulo superior de las distancias
-triu_electrodeDistances=triu(electrodeDistances);
+triu_electrodeDistances=triu(electrodeDistances) - tril(ones(size(electrodeDistances))).*2;
 %me quedo con los valores diferentes a cero de las distancias
 %me queda un vector
-triu_electrodeDistances=triu_electrodeDistances(triu_electrodeDistances~=0);
+triu_electrodeDistances=triu_electrodeDistances(triu_electrodeDistances~=-2);
 
 %mean entre canales
 %reshape primero
@@ -94,18 +99,18 @@ mean_cond2_matrix=reshape(mean_cond2_xChannel, channelNr,channelNr);
 triu_mean_cond2=triu(mean_cond2_matrix);
 
 %me quedo con los valores del triangulo superior de la matriz cuadrada
-pre_data_cond1=mean_cond1_matrix(triu_mean_cond1~=0);
+pre_data_cond1=mean_cond1_matrix(triu_mean_cond1~=-2);
 %armo una matriz que tiene dos columnas: los valores medios de conectividad
 %y las distancias
-data_cond1=cat(2,pre_data_cond1, triu_electrodeDistances); %agrego columna de distancia
+data_cond1=cat(2,pre_data_cond1', triu_electrodeDistances'); %agrego columna de distancia
 %ordeno los valores por las distancias
 data_cond1_ordered=sortrows(data_cond1, 2); % sort por distancia
 
 %me quedo con los valores del triangulo superior de la matriz cuadrada
-pre_data_cond2=mean_cond2_matrix(triu_mean_cond2~=0);
+pre_data_cond2=mean_cond2_matrix(triu_mean_cond2~=-2);
 %armo una matriz que tiene dos columnas: los valores medios de conectividad
 %y las distancias
-data_cond2=cat(2, pre_data_cond2, triu_electrodeDistances);
+data_cond2=cat(2, pre_data_cond2', triu_electrodeDistances');
 %ordeno los valores por las distancias
 data_cond2_ordered=sortrows(data_cond2,2);
 
@@ -133,13 +138,13 @@ Data_Cond2 = zeros((channelNr*channelNr/2)-(channelNr/2),size(C_2,3));
 
 for i = 1 : size(C_1,3)
     A = squeeze(t_C1(i,:,:));
-    B = A(A~=0);
+    B = A(A~=-2);
     Data_Cond1(:,i) = B;
 end
 
 for i = 1 : size(C_2,3)
     A = squeeze(t_C2(i,:,:));
-    B = A(A~=0);
+    B = A(A~=-2);
     Data_Cond2(:,i) = B;
 end
  
@@ -166,7 +171,7 @@ for i = 1 : size(uniqueDistances,1)
     meanValueForDistance = mean(valuesForDistance);
     cond2UniqueValues(i) = meanValueForDistance;
 
-    data = {rvaluesForDistance1,rvaluesForDistance2};
+    data = {rvaluesForDistance1',rvaluesForDistance2'};
     [t df pvals] = statcond(data, 'mode', 'perm', 'naccu', 1000,'paired','off');
     
     pvalsUniqueValues(i) = pvals;

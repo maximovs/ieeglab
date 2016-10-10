@@ -1,7 +1,7 @@
 function [ output, data ] = execute_epoching( handles)
 %GET_FIRST_COINCIDENCE Summary of this function goes here
 %   Detailed explanation goes here
-    addpath('epoching/');
+    addpath(fullfile(handles.data.ieeglab_path,'epoching'));
     output = handles.data.preprocessed_data;
     data = handles.data;
     f = str2func(handles.data.epoching_function.str);

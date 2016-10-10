@@ -14,7 +14,7 @@ connMat = connectionMatrix;
 connMat(connectionMatrix~=0) = 1;
 connections = sum(connMat)';
 
-color = CreateColorValuesOfNeuroAnatomicRegions(electrodes.labels);
+color = create_color_values_of_neuro_anatomic_regions(electrodes.labels);
 
 fileID = fopen([fileName2Save '.node'],'w');
 formatSpec = '%s\r\n';
@@ -31,12 +31,12 @@ for i = 1 : size(connectionMatrix,1)
             defaultIndex = 0;
             otherIndex = 0;
             if connections(i) == 0
-                defaultIndex = structfind(nodeSpecStruct,'condition','default');
+                defaultIndex = struct_find(nodeSpecStruct,'condition','default');
                 color2print = nodeSpecStruct(defaultIndex).color;
                 size2print = nodeSpecStruct(defaultIndex).size;
             else
                 color2print = num2str(color(i));
-                otherIndex = structfind(nodeSpecStruct,'condition','other');
+                otherIndex = struct_find(nodeSpecStruct,'condition','other');
                 size2print = nodeSpecStruct(otherIndex).size;
             end            
         otherwise

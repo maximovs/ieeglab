@@ -34,7 +34,7 @@ plot_power_spectrum(EEG.data(1,:),EEG.srate,'Band-pass filtered Signal')
 
 filteredData = EEG.data;
 %save 'filteredData.mat' filteredData
-evalStr = ['save ' data.path filteredFileName '.mat filteredData'];
+evalStr = ['save ' fullfile(data.path, [ filteredFileName '.mat']) ' filteredData'];
 eval(evalStr);
 
 %referencia a la media
@@ -43,5 +43,5 @@ avgMatrix = repmat(avg,size(filteredData,1),1);
 mean_data = filteredData - avgMatrix;
 
 %save 'data.mat' data;
-evalStr = ['save ' data.path referencedFileName '.mat mean_data'];
+evalStr = ['save ' fullfile(data.path, [referencedFileName '.mat']) ' mean_data'];
 eval(evalStr);
