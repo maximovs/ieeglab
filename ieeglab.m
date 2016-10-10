@@ -516,6 +516,8 @@ if isfield(handles.data,'preprocessed_data')
     if ~isempty(answer)
         figure; pop_spectopo(EEG, 1, [EEG.xmin*1000 EEG.xmax*1000], 'EEG' , 'percent', str2num(answer{1}), 'freqrange',str2num(answer{2}),'electrodes','off');
     end
+else
+    msgbox('You should run preprocessing before.','Warning')
 end
 
 function close_GUI(hObject, eventdata, handles)
