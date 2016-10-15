@@ -7,6 +7,7 @@ if isfield(data,'python_args')
 else
     python_args = {};
 end
+transfer_args_file_name = fullfile(data.path, transfer_args_file_name);
 EEG = pop_saveset( EEG, 'filepath', data.path, 'filename', transfer_set_file_name);
 save(transfer_args_file_name, 'python_args')
 command_str = [python_path ' ' fullfile(data.ieeglab_path, 'python_scripts', script_file_name) ' ' fullfile(data.path,transfer_set_file_name) ' ' transfer_args_file_name];

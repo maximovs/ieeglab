@@ -22,7 +22,7 @@ function varargout = ieeglab(varargin)
 
 % Edit the above text to modify the response to help ieeglab
 
-% Last Modified by GUIDE v2.5 30-Sep-2016 15:13:08
+% Last Modified by GUIDE v2.5 14-Oct-2016 13:50:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -548,3 +548,13 @@ function load_menu_Callback(hObject, eventdata, handles)
 % hObject    handle to load_menu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function view_log_Callback(hObject, eventdata, handles)
+    if isfield(handles.data,'path')
+        display_text_file(handles.data.path);
+    else
+        msgbox('Nothing has been logged yet.','Warning')
+    end
+
