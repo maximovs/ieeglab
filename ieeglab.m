@@ -22,7 +22,7 @@ function varargout = ieeglab(varargin)
 
 % Edit the above text to modify the response to help ieeglab
 
-% Last Modified by GUIDE v2.5 14-Oct-2016 13:50:30
+% Last Modified by GUIDE v2.5 17-Oct-2016 10:23:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -179,6 +179,7 @@ if isfield(handles.data,'current_preprocessing_function_to_delete')
             preprocessing_function.params = answer;
             handles.data.preprocessing_functions{handles.data.current_preprocessing_function_to_delete} = preprocessing_function;
             handles.data.data_status = 0;
+            load_handles(handles);
             guidata(hObject,handles)
         end
     end
@@ -210,6 +211,7 @@ if ~isempty(input(:,1))
         return
     end
 end
+load_handles(handles);
 % Save the handles structure.
 guidata(hObject,handles)
 
@@ -233,6 +235,7 @@ if ~isempty(input(:,1))
     if ~isempty(answer)
         handles.data.epoching_function.params = answer;
         handles.data.data_status = min(1,handles.data.data_status);
+        load_handles(handles);
         guidata(hObject,handles)
     end
 end
@@ -251,6 +254,7 @@ if isfield(handles.data,'current_processing_function_to_delete')
             processing_function.params = answer;
             handles.data.processing_functions{handles.data.current_processing_function_to_delete} = processing_function;
             handles.data.data_status = min(2,handles.data.data_status);
+            load_handles(handles);
             guidata(hObject,handles)
         end
     end
@@ -374,12 +378,14 @@ function plot_scroll_epoching_Callback(hObject, eventdata, handles)
 % --- Executes on key press with focus on epoching_variables and none of its controls.
 function epoching_variables_KeyPressFcn(hObject, eventdata, handles)
 handles.data.data_status = min(1,handles.data.data_status);
+load_handles(handles);
 
 
 % --------------------------------------------------------------------
 function run_processing_Callback(hObject, eventdata, handles)
     handles = run_processing(hObject, handles);
     if handles.data.data_status == 3
+        load_handles(handles);
         msgbox('Processing finished!','Success')
     end
 
@@ -387,6 +393,7 @@ function run_processing_Callback(hObject, eventdata, handles)
 function run_epoching_Callback(hObject, eventdata, handles)
     handles = run_epoching(hObject, handles);
     if handles.data.data_status == 2
+        load_handles(handles);
         msgbox('Epoching finished!','Success')
     end
 
@@ -394,6 +401,7 @@ function run_epoching_Callback(hObject, eventdata, handles)
 function run_preprocessing_Callback(hObject, eventdata, handles)
     handles = run_preprocessing(hObject, handles);
     if handles.data.data_status == 1
+        load_handles(handles);
         msgbox('Preprocessing finished!','Success')
     end
 
@@ -452,8 +460,26 @@ end
 function plot_scroll_Callback(hObject, eventdata, handles)
 if isfield(handles.data,'EEG')
     pop_eegplot( handles.data.EEG, 1, 1, 1);
+else
+    msgbox('No .set file has been loaded.','Warning')
 end
 
+% --------------------------------------------------------------------
+function current_plot_scroll_Callback(hObject, eventdata, handles)
+switch handles.data.data_status
+    case 0
+        if isfield(handles.data,'EEG')
+            pop_eegplot( handles.data.EEG, 1, 1, 1);
+        else
+            msgbox('No .set file has been loaded.','Warning')
+        end
+    case 1
+        pop_eegplot( handles.data.preprocessed_data, 1, 1, 1);
+    case 2
+        pop_eegplot( handles.data.epoched_data, 1, 1, 1);
+    case 3
+        pop_eegplot( handles.data.processed_data, 1, 1, 1);
+end
 
 % --------------------------------------------------------------------
 function load_set_Callback(hObject, eventdata, handles)
@@ -462,6 +488,9 @@ if file_name
     EEG = pop_loadset('filename',file_name,'filepath', file_path);
     EEG = eeg_checkset( EEG );
     handles.data.EEG = EEG;
+    handles.data.set_file_name = file_name;
+    handles.data.data_status = 0;
+    load_handles(handles);
     guidata(hObject,handles)
 end
 
@@ -496,6 +525,7 @@ answer = inputdlg('Channels to discard','Input', 5, {mat2str(handles.data.channe
 if ~isempty(answer)
     handles.data.channels_to_discard = str2num(answer{1});
     handles.data.data_status = 0;
+    load_handles(handles);
     msgbox('Channels will be discarded after running w_preprocess.','Success')
 end
 guidata(hObject,handles)
@@ -557,4 +587,8 @@ function view_log_Callback(hObject, eventdata, handles)
     else
         msgbox('Nothing has been logged yet.','Warning')
     end
+
+
+% --------------------------------------------------------------------
+function Untitled_5_Callback(hObject, eventdata, handles)
 
