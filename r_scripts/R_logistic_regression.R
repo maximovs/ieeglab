@@ -1,3 +1,5 @@
+args = commandArgs(trailingOnly=TRUE)
+input_mat_path = args[1]
 #LIBRERIAS R
 library(R.matlab)
 library(rms)
@@ -11,19 +13,19 @@ setwd("/Users/maximo/Downloads/r")
 source('Statistical_auxiliary_functions.R')
 
 #levantar un o dos .mat para crear un data frame, adem?s las variables de guardado de los plots
-
+input_mat <- data.frame(readMat(input_mat_path)$r.args)
 #PARAMETERS
-table_filename = 'P9_RegTable.mat'  #filename of .mat with a variable named 'table'
-label_filename = 'P9_RegTable_labels.mat' #filename of .mat with a variable named 'labels', which corresponds to the columns of table
+table_filename = as.character(input_mat['table.filename',])#'P9_RegTable.mat'  #filename of .mat with a variable named 'table'
+label_filename = as.character(input_mat['label.filename',])#'P9_RegTable_labels.mat' #filename of .mat with a variable named 'labels', which corresponds to the columns of table
 
-binary_column_name = 'Stymulus.Type'
-binary_column = 5
-initial_column_data = 10
+binary_column_name = as.character(input_mat['binary.column.name',])#'Stymulus.Type'
+binary_column = as.numeric(input_mat['binary.column',])#5
+initial_column_data = as.numeric(input_mat['initial.column.data',])#10
 
-alpha <- 0.05
-path_to_save = 'testprint\\';
+alpha <- as.numeric(input_mat['alpha',])#0.05
+path_to_save = as.character(input_mat['path.to.save',])#'testprint\\';
 
-save <- 1
+save <- as.numeric(input_mat['save',])#1
 
 #PARAMETERS - NOT INPUTS
 # choose a threshold for dichotomizing according to predicted probability
@@ -79,4 +81,3 @@ for (i in initial_column_data:dim(table_data)[2] ) {
     plot_logistic_regression(x,y,sTitle,xlabel,ylabel,glm.out,filename_to_save,save)
   }
 }
-
