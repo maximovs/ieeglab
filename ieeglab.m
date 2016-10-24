@@ -22,7 +22,7 @@ function varargout = ieeglab(varargin)
 
 % Edit the above text to modify the response to help ieeglab
 
-% Last Modified by GUIDE v2.5 17-Oct-2016 10:23:20
+% Last Modified by GUIDE v2.5 24-Oct-2016 12:25:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -592,3 +592,19 @@ function view_log_Callback(hObject, eventdata, handles)
 % --------------------------------------------------------------------
 function Untitled_5_Callback(hObject, eventdata, handles)
 
+
+% --------------------------------------------------------------------
+function load_edf_Callback(hObject, eventdata, handles)
+%     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+%     EEG = pop_biosig('/Users/maximo/Downloads/Florencia_Ignacio_24082014_EFP_2.edf');
+%     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'gui','off');
+    [file_name, file_path] = uigetfile('*.edf','Select the .edf file');
+    if file_name
+        EEG = pop_biosig(fullfile(file_path, file_name));
+        EEG = eeg_checkset( EEG );
+        handles.data.EEG = EEG;
+        handles.data.set_file_name = file_name;
+        handles.data.data_status = 0;
+        load_handles(handles);
+        guidata(hObject,handles)
+    end

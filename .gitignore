@@ -4,3 +4,5 @@
 *.pptx
 *.m~
 projects/*
+*.pyc
+venv/*
