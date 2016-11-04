@@ -13,11 +13,12 @@ function calculate_brief_time_span(EEG,condition_1, condition_2,bandpassRange,ep
 %base_window: vector of two values used to determine base window 
 
 %filter EEG signal in desired frequency range
-EEG = pop_eegfilt( EEG, bandpassRange(1,1), bandpassRange(1,2), [], [0], 0, 0, 'fir1', 0);
+%EEG = pop_eegfilt( EEG, bandpassRange(1,1), bandpassRange(1,2), [], [0], 0, 0, 'fir1', 0);
+EEG = pop_eegfiltnew(EEG, bandpassRange(1,1), bandpassRange(1,2), 1690, 0, [], 0);
 
 %epoch signal
 data = EEG.data;
-addpath(fullfile(handles.data.ieeglab_path,'epoching'));
+%addpath(fullfile(data.ieeglab_path,'epoching'));
 [ EEG, data ] = w_epoch(epoch_window, base_window,'', EEG, data);
 
 %filter by conditions
