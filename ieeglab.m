@@ -501,7 +501,7 @@ function [data] = calculate_channels_to_discard(handles)
     else
         eeg_data = handles.data.EEG.data;
     end
-    addpath('preprocessing/');
+    addpath(fullfile(handles.data.ieeglab_path, 'preprocessing'));
     [channels_to_discard, median_variance, jumps, nr_jumps]  = get_channels_to_discard(eeg_data, 200);
     data.channels_to_discard = channels_to_discard;
     data.median_variance = median_variance;
