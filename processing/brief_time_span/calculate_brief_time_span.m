@@ -18,7 +18,7 @@ EEG = pop_eegfiltnew(EEG, bandpassRange(1,1), bandpassRange(1,2), 1690, 0, [], 0
 
 %epoch signal
 data = EEG.data;
-addpath(fullfile(handles.data.ieeglab_path,'epoching'));
+%addpath(fullfile(data.ieeglab_path,'epoching'));
 [ EEG, data ] = w_epoch(epoch_window, base_window,'', EEG, data);
 
 %filter by conditions
