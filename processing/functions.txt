@@ -12,3 +12,4 @@ w_logistic_regression| table_filename= P9_RegTable.mat| label_filename= P9_RegTa
 w_plot_wSMI_stats_and_connections| conditions_1= Ignacio-int| conditions_2= Ignacio-acc| taus= [1 2 4 8 16 32]| taus_values= 3| node_file_names= Ignacio_Nodes.node| methods= boot| wsmi_path| p_value= 0.05| threshold= 1| plot_stats_aux= 1
 w_plot_wSMI_brain_net| conditions_1= Ignacio-int| conditions_2= Ignacio-acc| taus= [1 2 4 8 16 32]| taus_values= 3| node_file_names= Ignacio_Nodes.node| methods= boot| wsmi_path
 w_plot_wSMI_distance_by_equal_id| task_name= Retention_Faces| condition_1= Ignacio-int| condition_2= Ignacio-acc| taus= [1 2 4 8 16 32]| file_name| label_file_name= Ignacio1_Preprocessed_Anatomic_Normalised_Final.txt| wsmi_path| p_value= 0.01| threshold= 0| path_to_save
+w_brief_time_span_connectivity| condition_1= int| condition_2= acc| bandpassRange= [2 40]| epoch_window= [-0.5 1.5]| base_window= [-500 0]| method= boot| path_to_save= BTS| file2save= Ignacio
