@@ -1,5 +1,5 @@
 function [EEG, data] = w_brief_time_span_connectivity(condition_1, condition_2,bandpassRange,epoch_window,base_window,method,path_to_save,newFileName,EEG,data)
-
+addpath(fullfile(data.ieeglab_path,'epoching'));
 if isequal(path_to_save,'')
     path_to_save = fullfile(data.path, 'BTS');
 end

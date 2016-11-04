@@ -1,4 +1,4 @@
-function [ EEG, data ] = w_epoch(epoch_window, base_window,file2save, EEG, data)
+function [ EEG, data ] = w_epoch(epoch_window, base_window,file_to_save, EEG, data)
 types = unique({EEG.event.type});
 str = '';
 for i=1:length(types)
@@ -14,20 +14,12 @@ if ~isempty(answer)
 end
 epoch_window = str2num(epoch_window);
 base_window = str2num(base_window);
-EEG = pop_epoch(EEG, types, epoch_window, 'newname', '', 'epochinfo', 'yes');
 
-if epoch_window(1) ~= 0
-    display('Baseline Removal')
-    EEG = pop_rmbase(EEG, base_window);
+if ~isequal(file_to_save,'')
+    file_to_save = fullfile(data.path, [file_to_save '.mat']);
 end
 
-if ~isequal(file2save,'')
-    file_to_save = fullfile(data.path, [file2save '.mat']);
-    old_data = data;
-    data = EEG.data;
-    str = ['save ' file_to_save ' data;'];
-    eval(str)
-    data = old_data;
-end
+EEG = ieeg_epoch(types, epoch_window, base_window,file_to_save, EEG);
+
 end
 

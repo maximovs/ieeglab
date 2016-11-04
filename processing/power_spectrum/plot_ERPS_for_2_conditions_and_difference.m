@@ -41,8 +41,8 @@ function plot_ERPS_for_2_conditions_and_difference(condition_1,condition_2, file
 
 %Condition1
 %load EEGs
-EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG, data);
-EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG, data);
+EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG);
+EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG);
 
 
 %calculate ERPS

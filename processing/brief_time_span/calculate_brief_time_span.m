@@ -18,14 +18,24 @@ EEG = pop_eegfiltnew(EEG, bandpassRange(1,1), bandpassRange(1,2), 1690, 0, [], 0
 
 %epoch signal
 data = EEG.data;
-%addpath(fullfile(data.ieeglab_path,'epoching'));
-[ EEG, data ] = w_epoch(epoch_window, base_window,'', EEG, data);
+types = unique({EEG.event.type});
+str = '';
+for i=1:length(types)
+    if isequal(str,'')
+        str = types{i};
+    else
+        str = [str ' ' types{i}];
+    end
+end
+types = strsplit(str);
+
+[ EEG ] = ieeg_epoch(types, epoch_window, base_window,'', EEG);
 
 %filter by conditions
-EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG, data);
+EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG);
 signal1 = EEG_condition_1.data;
 
-EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG, data);
+EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG);
 signal2 = EEG_condition_2.data;
 
 %calculo correlacion 
@@ -58,6 +68,6 @@ switch method
         t = stats.tstat;
 end        
 
-matrixFilename = [newFileName '-' condition1 '-' condition2 '.mat'];
+matrixFilename = [newFileName '-' condition_1 '-' condition_2 '.mat'];
 str = ['save ' matrixFilename ' t df pvals'];
 eval(str)

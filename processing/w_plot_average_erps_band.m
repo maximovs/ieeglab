@@ -39,8 +39,8 @@ totalERPS = erpsMapsByTrialByROIs;
 
 roi_count  = size(roi_struct,2);
 %epochLine = -4200;
-condition_1_indexes = calculate_epochs_mask(strsplit(condition_1), EEG, data);
-condition_2_indexes = calculate_epochs_mask(strsplit(condition_2), EEG, data);
+condition_1_indexes = calculate_epochs_mask(strsplit(condition_1), EEG);
+condition_2_indexes = calculate_epochs_mask(strsplit(condition_2), EEG);
 frequencies = freqs(:);
 
 for f = 1 : size(frequency_bands,1)

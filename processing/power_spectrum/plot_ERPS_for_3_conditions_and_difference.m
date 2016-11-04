@@ -44,9 +44,9 @@ function plot_ERPS_for_3_conditions_and_difference(condition_1,condition_2, cond
 
 %ERPS FOR FACES AND WORDS (+ DIFF)
 %eeglab needs to be loaded already
-EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG, data);
-EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG, data);
-EEG_condition_3 = filter_epochs(strsplit(condition_3), EEG, data);
+EEG_condition_1 = filter_epochs(strsplit(condition_1), EEG);
+EEG_condition_2 = filter_epochs(strsplit(condition_2), EEG);
+EEG_condition_3 = filter_epochs(strsplit(condition_3), EEG);
 %Condition1
 %calculate ERPS
 titleName = fullfile(path_to_save, [files_prefix '-' condition_1]);
