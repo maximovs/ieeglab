@@ -1,4 +1,6 @@
 print_channels_labels| File name
+w_print_electrode_information| File name
+w_load_channel_location| node_file_name=  
 w_preprocess| file_name= Ignacio2| notchHz= [50 100]| notchWidth= 1| bandpassRange= [1 200]
 w_notch_filter| notchHz= [50]| notchWidth= 1
 w_bandpass_filter| bandpassRange= [1 200]
