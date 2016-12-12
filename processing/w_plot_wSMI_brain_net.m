@@ -1,6 +1,8 @@
-function [EEG, data] = w_plot_wSMI_brain_net(conditions_1, conditions_2, taus, taus_values, node_file_names, methods, wsmi_path, EEG, data)
+function [EEG, data] = w_plot_wSMI_brain_net(conditions_1, conditions_2, configurationMat,taus, taus_values, node_file_names, methods, wsmi_path, EEG, data)
 %plots files created by mainPlotwSMIStatsAndConnections - uses Brain Net
 %Viewer
+%WARNING: requires that BrainMesh_ICBM152.nv and configurationMat and be in a relative path of
+%wSMI\BrainNetAux
 if isequal(wsmi_path,'')
     wsmi_path = data.path;
 end
@@ -18,7 +20,7 @@ conditions_2 = cellstr(strsplit(conditions_2));%{'P10_Resting','P10_Resting_256'
 
 imageExt = '.eps';
 surfaceFile = fullfile(wsmi_path, 'wSMI', 'BrainNetAux', 'BrainMesh_ICBM152.nv');
-configurationMat = fullfile(wsmi_path, 'wSMI', 'BrainNetAux','RestingConfigMat_Threshold_Nodes.mat');
+configurationMat = fullfile(wsmi_path, 'wSMI', 'BrainNetAux',configurationMat);
 
 %methods = {'ttest','boot'};
 methods = cellstr(strsplit(methods));%{'boot'};
